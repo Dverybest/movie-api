@@ -9,7 +9,7 @@ import {
 export class CreateMovieDto {}
 
 export class BookMovieTicketDto {
-  @IsPositive()
+  @IsNotEmpty()
   @ApiProperty()
   movieId: number;
 
