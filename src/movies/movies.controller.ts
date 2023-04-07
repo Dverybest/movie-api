@@ -3,22 +3,22 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
   HttpCode,
   HttpStatus,
   NotFoundException,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
-import { CreateMovieDto } from './dto/create-movie.dto';
+import { BookMovieTicketDto, CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { MovieDto, MovieListResponseDTO } from './dto/movie.dto';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FindOneParams, MovieDto, MovieListResponseDTO } from './dto/movie.dto';
 
 @ApiTags('movies')
 @Controller('movies')
 export class MoviesController {
+  bookingList: Array<BookMovieTicketDto> = [];
+
   constructor(private readonly moviesService: MoviesService) {}
 
   @HttpCode(HttpStatus.OK)
@@ -42,7 +42,9 @@ export class MoviesController {
     type: MovieDto,
   })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Endpoint for getting movie by id' })
+  findOne(@Param('id') id: FindOneParams) {
     const movie = this.moviesService.findOne(+id);
 
     if (!movie) {
@@ -52,6 +54,24 @@ export class MoviesController {
       data: movie,
       status: 'success',
       message: 'movie list successfully retrieved',
+    };
+  }
+  @Post('/book-movie-ticket')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Endpoint for booking movie ticket' })
+  buyMovieTicket(@Body() body: BookMovieTicketDto) {
+    const data = {
+      ...body,
+      id: Math.floor(Math.random() * 10000000),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    this.bookingList.push(data);
+    return {
+      status: 'success',
+      message: 'movie ticket booked successfully',
+      data,
     };
   }
 }

@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNumberString } from 'class-validator';
 
 export class MovieDto {
   @ApiProperty()
@@ -74,4 +75,9 @@ export class MovieListResponseDTO {
 
   @ApiProperty({ type: [MovieDto] })
   data: [MovieDto];
+}
+
+export class FindOneParams {
+  @IsNumberString()
+  id: number;
 }
