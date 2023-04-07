@@ -7,12 +7,12 @@ import {
   HttpCode,
   HttpStatus,
   NotFoundException,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { BookMovieTicketDto, CreateMovieDto } from './dto/create-movie.dto';
-import { UpdateMovieDto } from './dto/update-movie.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { FindOneParams, MovieDto, MovieListResponseDTO } from './dto/movie.dto';
+import { MovieDto, MovieListResponseDTO } from './dto/movie.dto';
 
 @ApiTags('movies')
 @Controller('movies')
@@ -44,7 +44,7 @@ export class MoviesController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Endpoint for getting movie by id' })
-  findOne(@Param('id') id: FindOneParams) {
+  findOne(@Param('id', ParseIntPipe) id: number,) {
     const movie = this.moviesService.findOne(+id);
 
     if (!movie) {
