@@ -1,9 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import helmet from 'helmet';
+import { TransformInterceptor } from './utils';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+  });
+
+  app.use(helmet());
+
   const config = new DocumentBuilder()
     .setTitle('Movie Ticket API ')
     .setDescription('Movie Ticket Booking API')
@@ -16,6 +23,7 @@ async function bootstrap() {
       persistAuthorization: true,
     },
   });
+  // app.useGlobalInterceptors(new TransformInterceptor());
   await app.listen(3000);
 }
 bootstrap();
