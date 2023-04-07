@@ -44,14 +44,14 @@ export class MoviesController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Endpoint for getting movie by id' })
-  findOne(@Param('id', ParseIntPipe) id: number,) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     const movie = this.moviesService.findOne(+id);
 
     if (!movie) {
       throw new NotFoundException('The movie has being deleted or not found');
     }
     return {
-      data: movie,
+      data: { ...movie, id },
       status: 'success',
       message: 'movie list successfully retrieved',
     };
