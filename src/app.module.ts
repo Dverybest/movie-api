@@ -5,6 +5,9 @@ import { MoviesModule } from './movies/movies.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configuration } from './config';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { User } from './users/entities/user.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,10 +23,12 @@ import { configuration } from './config';
         username: config.get('database.username'),
         password: config.get('database.password'),
         database: config.get('database.name'),
-        entities: [],
+        autoLoadEntities: true,
       }),
     }),
+    AuthModule,
     MoviesModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
