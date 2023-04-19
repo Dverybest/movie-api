@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { FindOneOptions, Repository } from 'typeorm';
+import { hashPassword } from 'src/utils/bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -10,8 +11,10 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  create() {
-    return 'This action adds a new user';
+  createUser(user: Partial<User>) {
+    const password = hashPassword(user.password);
+    const newUser = this.usersRepository.create({ ...user, password });
+    return this.usersRepository.save(newUser);
   }
 
   findAll(): Promise<User[]> {

@@ -7,7 +7,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configuration } from './config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { User } from './users/entities/user.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,6 +23,7 @@ import { User } from './users/entities/user.entity';
         password: config.get('database.password'),
         database: config.get('database.name'),
         autoLoadEntities: true,
+        synchronize:true
       }),
     }),
     AuthModule,
