@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configuration } from './config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,6 +25,15 @@ import { UsersModule } from './users/users.module';
         database: config.get('database.name'),
         autoLoadEntities: true,
         synchronize:true
+      }),
+    }),
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      global:true,
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get('jwtSecret'),
+        global: true,
+        signOptions: { expiresIn: '60m' },
       }),
     }),
     AuthModule,

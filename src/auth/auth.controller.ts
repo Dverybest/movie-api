@@ -1,6 +1,14 @@
-import { Controller, Post, Body, HttpStatus, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpStatus,
+  HttpCode,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginDTO, SignUpDTO } from './dto/auth.dto';
 
 @ApiTags('auth')
@@ -13,6 +21,7 @@ export class AuthController {
     summary: 'Create user account endpoint',
   })
   @Post('/sign-up')
+  @UseInterceptors(ClassSerializerInterceptor)
   async create(@Body() signUpDto: SignUpDTO) {
     return await this.authService.signUp(signUpDto);
   }
@@ -22,6 +31,7 @@ export class AuthController {
     summary: 'User login endpoint',
   })
   @Post('/sign-in')
+  @UseInterceptors(ClassSerializerInterceptor)
   async login(@Body() loginDto: LoginDTO) {
     return await this.authService.login(loginDto);
   }

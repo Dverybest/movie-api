@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Entity,
   Column,
@@ -25,13 +26,14 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
+  @Exclude()
   @Column()
   password: string;
 
   @Column({ unique: true })
   email: string;
 
-  @Column({ type: 'enum', enum: UserType, default: UserType.USER })
+  @Column({ type: "enum", enum: UserType, default: UserType.USER })
   userType: UserType;
 
   @CreateDateColumn()
