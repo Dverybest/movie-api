@@ -13,6 +13,7 @@ import { MoviesService } from './movies.service';
 import { BookMovieTicketDto, CreateMovieDto } from './dto/create-movie.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MovieDto, MovieListResponseDTO } from './dto/movie.dto';
+import { Auth } from 'src/auth/auth.decorator';
 
 @ApiTags('movies')
 @Controller('movies')
@@ -56,6 +57,8 @@ export class MoviesController {
       message: 'movie list successfully retrieved',
     };
   }
+
+  @Auth()
   @Post('/book-movie-ticket')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Endpoint for booking movie ticket' })

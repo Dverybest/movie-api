@@ -1,12 +1,24 @@
 ## Description
 
-Movie Ticket Booking API built using NestJs
+Movie Ticket Booking API 
+
+## Technology
+- NestJS
+- MySQL
+- TypeORM
 
 ## Installation
 
 ```bash
 $ yarn install
 ```
+
+## Enviroment variables
+
+```bash
+$ touch .env
+```
+copy the keys in .env-example file locatated in the root directory into the .env created above and fill in the values
 
 ## Running the app
 
