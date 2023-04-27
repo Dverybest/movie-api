@@ -4,10 +4,11 @@ import { AppService } from './app.service';
 import { MoviesModule } from './movies/movies.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { configuration } from './config';
+import { configuration, jwtConfig, mailerConfig, typeormConfig } from './config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { JwtModule } from '@nestjs/jwt';
+import { MailerModule } from '@nestjs-modules/mailer';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -16,25 +17,16 @@ import { JwtModule } from '@nestjs/jwt';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'mysql',
-        host: config.get('database.host'),
-        port: config.get('database.port'),
-        username: config.get('database.username'),
-        password: config.get('database.password'),
-        database: config.get('database.name'),
-        autoLoadEntities: true,
-        synchronize:true
-      }),
+      useFactory: typeormConfig,
     }),
     JwtModule.registerAsync({
       inject: [ConfigService],
-      global:true,
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get('jwtSecret'),
-        global: true,
-        signOptions: { expiresIn: '60m' },
-      }),
+      global: true,
+      useFactory: jwtConfig,
+    }),
+    MailerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: mailerConfig,
     }),
     AuthModule,
     MoviesModule,

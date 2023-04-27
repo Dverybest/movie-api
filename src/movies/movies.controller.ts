@@ -39,7 +39,6 @@ export class MoviesController {
 
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({
-    description: 'movie successfully retrieved',
     type: MovieDto,
   })
   @Get(':id')
@@ -51,11 +50,7 @@ export class MoviesController {
     if (!movie) {
       throw new NotFoundException('The movie has being deleted or not found');
     }
-    return {
-      data: { ...movie, id },
-      status: 'success',
-      message: 'movie list successfully retrieved',
-    };
+    return { ...movie, id, message: 'movie successfully retrieved' };
   }
 
   @Auth()
@@ -71,10 +66,6 @@ export class MoviesController {
     };
 
     this.bookingList.push(data);
-    return {
-      status: 'success',
-      message: 'movie ticket booked successfully',
-      data,
-    };
+    return { ...data, message: 'Ticket booked successfully' };
   }
 }
