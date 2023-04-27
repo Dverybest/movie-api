@@ -2,8 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
-import { TransformInterceptor } from './utils';
 import { ValidationPipe } from '@nestjs/common';
+import { TransformInterceptor } from './interceptors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -24,7 +24,7 @@ async function bootstrap() {
       persistAuthorization: true,
     },
   });
-  // app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
 }
