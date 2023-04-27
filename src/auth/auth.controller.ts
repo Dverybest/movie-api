@@ -9,8 +9,8 @@ import {
   Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { LoginDTO, SignUpDTO } from './dto/auth.dto';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthResDTO, LoginDTO, SignUpDTO } from './dto/auth.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { accountCreated, loginEmail } from 'src/templates';
 import { Request } from 'express';
@@ -27,6 +27,9 @@ export class AuthController {
   @ApiOperation({
     summary: 'Create user account endpoint',
   })
+  @ApiOkResponse({
+    type: AuthResDTO,
+  })
   @Post('/sign-up')
   @UseInterceptors(ClassSerializerInterceptor)
   async create(@Body() signUpDto: SignUpDTO) {
@@ -39,12 +42,15 @@ export class AuthController {
         username: res.user.email,
       }),
     });
-    return res;
+    return { ...res, message: 'Sign up successful' };
   }
 
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'User login endpoint',
+  })
+  @ApiOkResponse({
+    type: AuthResDTO,
   })
   @Post('/sign-in')
   @UseInterceptors(ClassSerializerInterceptor)
@@ -56,9 +62,9 @@ export class AuthController {
       html: loginEmail({
         name: res.user.fullName,
         ip: req.ip,
-        location :req.hostname
+        location: req.hostname,
       }),
     });
-    return res;
+    return { ...res, message: 'Login in successful' };
   }
 }
