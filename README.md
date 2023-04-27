@@ -6,6 +6,7 @@ Movie Ticket Booking API
 - NestJS
 - MySQL
 - TypeORM
+- Node Mailer
 
 ## Installation
 
@@ -48,6 +49,17 @@ $ yarn run test:cov
 
 ## Avaliable Endpoints
 
+### Auth
+- /auth/sign-up : create user account
+
+- /auth/sign-in : login exiting user
+
+### users (admin endpoint)
+- /users : get all users
+
+- /users/id : get user by id
+
+### movies
 - /movies : get list of movies
 
 - /movies/{id} : get movie by id
